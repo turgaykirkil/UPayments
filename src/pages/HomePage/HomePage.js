@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Button, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
 import Config from 'react-native-config'
 import ProductCard from '../../component/ProductCard/ProductCard'
@@ -9,36 +9,51 @@ import Loading from '../../component/Loading'
 import Error from '../../component/Error'
 
 const HomePage = ({ navigation }) => {
-  const [selected, setSelected] = useState(null)
-  const [products, setProducts] = useState([])
-  const [categories, setCategories] = useState([])
-  const [imageAvatar, setImageAvatar] = useState(null)
+  const [selectedId, setSelectedId] = useState(null);
+  const [setData, setSetData] = useState(data)
 
   const { loading, error, data } = useFetch(`${Config.API_URL}products`)
   const { loadingCat, errorCat, dataCat } = useCat(`${Config.API_URL}categories`)
 
+  useEffect(() => {
+    setSetData(data)
+  })
+
   const renderCategoryItem = ({ item }) => {
-    const backgroundColor = item.id === selected ? "#6e3b6e" : "#f9c2ff";
-    const color = item.id === selected ? 'white' : 'black';
+    const backgroundColor = item._id === selectedId ? "#B2B2B2" : "#EAEAEA";
+    const color = item._id === selectedId ? 'white' : 'black';
+    const colorFeather = item._id === selectedId ? '#3C4048' : 'white';
+
+    function categorySelect() {
+      setSelectedId(item._id)
+      const newData = data.filter(
+        function (item) {
+          const itemData = setData.category
+          const categoryData = item.name
+          return itemData.indexOf(ca);
+        })
+      setSetData(newData)
+      console.log(item.name)
+    }
+
 
     return (
       <TouchableOpacity
         key={item._id}
-        onPress={() => setSelected(item.id)}
+        onPress={categorySelect}
       >
         <View style={[styles.categoryItemContainer, {
-          backgroundColor: selected ? "#F5CA48" : "",
+          backgroundColor: backgroundColor
         }]}>
           <Text style={styles.categoryItemText}>{item.name}</Text>
           <View style={[styles.categoryItemFeather, {
-            backgroundColor: selected ? "red" : ""
+            backgroundColor: colorFeather
           }]}>
             <Feather
               name="chevron-down"
               size={10}
               style={styles.categoryItemFeatherSelect}
-              color={selected ? "white" : "black"}
-              extraData={selected}
+              color={color}
             />
           </View>
         </View>
@@ -63,6 +78,8 @@ const HomePage = ({ navigation }) => {
   if (error) {
     return <Error />
   }
+
+
 
   return (
     <View style={styles.container}>
@@ -91,9 +108,9 @@ const HomePage = ({ navigation }) => {
               <Text style={styles.productTitle}>Products { }</Text>
               <View style={styles.productList}>
                 <FlatList
-                  data={data}
+                  data={setData}
                   renderItem={renderProductItem}
-                  keyExtractor={(item, index) => item._id.toString()}
+                  keyExtractor={(item, index) => index.toString()}
                   numColumns={2}
                 />
               </View>
@@ -109,7 +126,6 @@ const HomePage = ({ navigation }) => {
               name="plus-circle"
               size={65}
               style={styles.addProductIcon}
-              extraData={selected}
             />
           </View>
         </TouchableOpacity>
@@ -117,6 +133,8 @@ const HomePage = ({ navigation }) => {
     </View>
   )
 }
+
+
 
 export default HomePage
 
@@ -155,6 +173,8 @@ const styles = StyleSheet.create({
     marginRight: 20,
     borderRadius: 20,
     width: 100,
+    borderWidth: 1
+
   },
   categoryItemImage: {
     width: 60,
