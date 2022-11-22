@@ -1,0 +1,40 @@
+{
+    "message": "Success",
+    "categories": [
+        {
+            "_id": "62e638f41126b53e1c7deb61",
+            "name": "Electronics",
+            "createdAt": "2022-07-31T08:10:28.145Z",
+            "updatedAt": "2022-07-31T08:10:28.145Z",
+            "__v": 0
+        },
+        {
+            "_id": "62e638fd1126b53e1c7deb65",
+            "name": "Clothing",
+            "createdAt": "2022-07-31T08:10:37.186Z",
+            "updatedAt": "2022-07-31T08:10:37.186Z",
+            "__v": 0
+        },
+        {
+            "_id": "62e6390e1126b53e1c7deb69",
+            "name": "Accessories",
+            "createdAt": "2022-07-31T08:10:54.540Z",
+            "updatedAt": "2022-07-31T08:10:54.540Z",
+            "__v": 0
+        },
+        {
+            "_id": "62e6391f1126b53e1c7deb6d",
+            "name": "Furniture",
+            "createdAt": "2022-07-31T08:11:11.918Z",
+            "updatedAt": "2022-07-31T08:11:11.918Z",
+            "__v": 0
+        },
+        {
+            "_id": "62e6397e1126b53e1c7deb72",
+            "name": "Hobby",
+            "createdAt": "2022-07-31T08:12:46.096Z",
+            "updatedAt": "2022-07-31T08:12:46.096Z",
+            "__v": 0
+        }
+    ]
+}

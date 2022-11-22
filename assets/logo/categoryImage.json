@@ -1,0 +1,24 @@
+{
+    "categories": [
+        {
+            "id": "1",
+            "name": "require('../../../assets/logo/Electronics.png')"
+        },
+        {
+            "id": "2",
+            "name": "require('../../../assets/logo/Clothing.png')"
+        },
+        {
+            "id": "3",
+            "name": "require('../../../assets/logo/Accessories.png')"
+        },
+        {
+            "id": "4",
+            "name": "require('../../../assets/logo/Furniture.png')"
+        },
+        {
+            "id": "5",
+            "name": "require('../../../assets/logo/Hobby.png')"
+        }
+    ]
+}
