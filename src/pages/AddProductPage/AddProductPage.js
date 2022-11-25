@@ -27,13 +27,12 @@ const DetailPage = ({ route, navigation }) => {
   const { data, loading, error, post } = usePost()
 
   async function handleSend(values) {
-    // console.log(values)
+    const add = { "category": selected }
     const posting = Object.assign(values, { "category": selected })
+    const posting1 = Object.assign(posting, { "developerEmail": "turgaykirkil@me.com" })
     console.log(posting)
-    // const posting = values.push(selected)
-    // console.log(posting)
-    post(`${Config.API_URL}products`, posting);
-    navigation.navigate('Home')
+    await post(`${Config.API_URL}products`, posting1);
+    // navigation.navigate('Home')
   }
 
   if (route.params) {
@@ -105,7 +104,7 @@ const DetailPage = ({ route, navigation }) => {
         </View>
         <View style={styles.container}>
           <Formik
-            initialValues={{ name: name, price: price, description: description, avatar: avatar}}
+            initialValues={{ name: name, price: price, description: description, avatar: avatar }}
             onSubmit={handleSend}
           >
             {({ handleChange, handleBlur, handleSubmit, values }) => (

@@ -14,16 +14,17 @@ function usePost() {
             const config = {
                 headers: { Authorization: `Bearer ${Config.TOKEN}}` }
             };
-            
-            const { data: responseData } = await axios.post(
-                url,
-                apiData,
-                {
-                    headers: {
-                      'Authorization': 'Bearer ' + Config.TOKEN
-                    }
-                 }
-            )
+
+            const { data: responseData } = await axios({
+                method: 'POST',
+                url: url,
+                data: apiData,
+                headers: {
+                    'Accepts': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Bearer ${Config.TOKEN}`
+                }
+            })
             // const { data: responseData } = await axios({
             //     method: 'POST',
             //     url: url,
@@ -35,9 +36,10 @@ function usePost() {
             //     },
             //   });
             setData(responseData);
+            console.log(responseData)
             setLoading(false);
         } catch (err) {
-            console.log(err.message);
+            // console.log(err.message);
             setError(err);
             setLoading(false);
         }
