@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, View, Text, FlatList, TextInput, Image, ScrollView, Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, SafeAreaView, View, Text, FlatList, TextInput, Image, ScrollView, Button, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
 import usePro from '../../hooks/usePro'
@@ -7,6 +7,8 @@ import Loading from '../../component/Loading'
 import Error from '../../component/Error'
 import useCat from '../../hooks/useCat'
 import { Formik } from 'formik';
+import usePost from '../../hooks/usePost'
+
 
 
 const DetailPage = ({ route, navigation }) => {
@@ -21,6 +23,18 @@ const DetailPage = ({ route, navigation }) => {
   const [category, setCategory] = useState(null)
 
   const { loadingCat, errorCat, dataCat } = useCat(`${Config.API_URL}categories`)
+
+  const { data, loading, error, post } = usePost()
+
+  async function handleSend(values) {
+    // console.log(values)
+    const posting = Object.assign(values, { "category": selected })
+    console.log(posting)
+    // const posting = values.push(selected)
+    // console.log(posting)
+    post(`${Config.API_URL}products`, posting);
+    navigation.navigate('Home')
+  }
 
   if (route.params) {
     const { loading, error, data } = usePro(`${Config.API_URL}products/${_id}`)
@@ -49,8 +63,6 @@ const DetailPage = ({ route, navigation }) => {
       setSelectedId(item._id)
       setSelected(item.name)
     }
-    console.log(selected)
-    
 
     return (
       <TouchableOpacity
@@ -93,8 +105,8 @@ const DetailPage = ({ route, navigation }) => {
         </View>
         <View style={styles.container}>
           <Formik
-            initialValues={{ name: name, price: price, description: description, avatar: avatar, category: selected }}
-            onSubmit={values => console.log(values)}
+            initialValues={{ name: name, price: price, description: description, avatar: avatar}}
+            onSubmit={handleSend}
           >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
               <View style={styles.textContainer}>
@@ -131,11 +143,24 @@ const DetailPage = ({ route, navigation }) => {
                       renderItem={renderCategoryItem}
                       keyExtractor={(item, index) => index.toString()}
                       horizontal={true}
-                      value={values.category}
+                    // value={values.category}
                     />
                   </View>
                 </View>
-                <Button onPress={handleSubmit} title="Submit" />
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  style={styles.buttonSubmit}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <Text style={styles.buttonText}>
+                      <Feather name='send' size={24} />
+                      Giriş Yap
+                    </Text>
+                  )}
+                </TouchableOpacity>
               </View>
             )}
           </Formik>
@@ -214,5 +239,12 @@ const styles = StyleSheet.create({
     height: 40,
     margin: 12,
 
+  },
+  buttonSubmit: {
+    backgroundColor: '#B2B2B2',
+    width: '100%',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
   }
 })
