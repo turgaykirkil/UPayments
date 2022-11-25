@@ -12,6 +12,7 @@ import { Formik } from 'formik';
 const DetailPage = ({ route, navigation }) => {
   const _id = route.params
   const [selected, setSelected] = useState(null)
+  const [selectedId, setSelectedId] = useState(null);
 
   const [name, setName] = useState(null)
   const [price, setPrice] = useState(null)
@@ -23,7 +24,6 @@ const DetailPage = ({ route, navigation }) => {
 
   if (route.params) {
     const { loading, error, data } = usePro(`${Config.API_URL}products/${_id}`)
-    console.log(data)
     useEffect(() => {
       setName(data?.name)
       setPrice(data?.price)
@@ -31,7 +31,7 @@ const DetailPage = ({ route, navigation }) => {
       setAvatar(data?.avatar)
       setCategory(data?.category)
     })
-    
+
     if (loading) {
       return <Loading />
     }
@@ -39,28 +39,36 @@ const DetailPage = ({ route, navigation }) => {
       return <Error />
     }
   }
+
   const renderCategoryItem = ({ item }) => {
-    const backgroundColor = item.id === selected ? "#6e3b6e" : "#f9c2ff";
-    const color = item.id === selected ? 'white' : 'black';
+    const backgroundColor = item._id === selectedId ? "#B2B2B2" : "#EAEAEA";
+    const color = item._id === selectedId ? 'white' : 'black';
+    const colorFeather = item._id === selectedId ? '#3C4048' : 'white';
+
+    function categorySelect() {
+      setSelectedId(item._id)
+      setSelected(item.name)
+    }
+    console.log(selected)
+    
 
     return (
       <TouchableOpacity
         key={item._id}
-        onPress={() => setSelected(item.id)}
+        onPress={categorySelect}
       >
         <View style={[styles.categoryItemContainer, {
-          backgroundColor: selected ? "#F5CA48" : "",
+          backgroundColor: backgroundColor
         }]}>
           <Text style={styles.categoryItemText}>{item.name}</Text>
           <View style={[styles.categoryItemFeather, {
-            backgroundColor: selected ? "red" : ""
+            backgroundColor: colorFeather
           }]}>
             <Feather
-              name="chevron-up"
+              name="chevron-down"
               size={10}
               style={styles.categoryItemFeatherSelect}
-              color={selected ? "white" : "black"}
-              extraData={selected}
+              color={color}
             />
           </View>
         </View>
@@ -85,7 +93,7 @@ const DetailPage = ({ route, navigation }) => {
         </View>
         <View style={styles.container}>
           <Formik
-            initialValues={{ name: name, price: price, description: description, avatar: avatar }}
+            initialValues={{ name: name, price: price, description: description, avatar: avatar, category: selected }}
             onSubmit={values => console.log(values)}
           >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -123,6 +131,7 @@ const DetailPage = ({ route, navigation }) => {
                       renderItem={renderCategoryItem}
                       keyExtractor={(item, index) => index.toString()}
                       horizontal={true}
+                      value={values.category}
                     />
                   </View>
                 </View>

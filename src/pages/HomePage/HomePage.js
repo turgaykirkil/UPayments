@@ -10,31 +10,39 @@ import Error from '../../component/Error'
 
 const HomePage = ({ navigation }) => {
   const [selectedId, setSelectedId] = useState(null);
-  const [setData, setSetData] = useState(data)
+  const [products, setProducts] = useState(data);
+  const [choosen, setChoosen] = useState(false)
+  const [selection, setSelection] = useState(null)
 
   const { loading, error, data } = useFetch(`${Config.API_URL}products`)
   const { loadingCat, errorCat, dataCat } = useCat(`${Config.API_URL}categories`)
 
-  useEffect(() => {
-    setSetData(data)
-  })
+  // useEffect(() => {
+  //   setProducts(data)
+  // })
 
   const renderCategoryItem = ({ item }) => {
     const backgroundColor = item._id === selectedId ? "#B2B2B2" : "#EAEAEA";
     const color = item._id === selectedId ? 'white' : 'black';
     const colorFeather = item._id === selectedId ? '#3C4048' : 'white';
-
+    
     function categorySelect() {
+      setSelection(selectedId)
       setSelectedId(item._id)
-      const newData = data.filter(
-        function (item) {
-          const itemData = setData.category
-          const categoryData = item.name
-          return itemData.indexOf(ca);
+      if (selection === selectedId) {
+        setSelection(null)
+        const newData = data.filter((cat) => {
+          setChoosen(true)
+          return cat.category === item.name
         })
-      setSetData(newData)
-      console.log(item.name)
+        setProducts(newData)
+      } else {
+        setSelectedId(null)
+        setProducts(data)
+      }
     }
+    console.log(selection)
+    console.log(selectedId)
 
 
     return (
@@ -108,7 +116,7 @@ const HomePage = ({ navigation }) => {
               <Text style={styles.productTitle}>Products { }</Text>
               <View style={styles.productList}>
                 <FlatList
-                  data={setData}
+                  data={choosen ? products : data}
                   renderItem={renderProductItem}
                   keyExtractor={(item, index) => index.toString()}
                   numColumns={2}
