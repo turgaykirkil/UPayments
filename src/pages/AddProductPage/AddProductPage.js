@@ -32,7 +32,7 @@ const DetailPage = ({ route, navigation }) => {
     const posting1 = Object.assign(posting, { "developerEmail": "turgaykirkil@me.com" })
     console.log(posting)
     await post(`${Config.API_URL}products`, posting1);
-    // navigation.navigate('Home')
+    navigation.navigate('Home')
   }
 
   if (route.params) {
